@@ -1,0 +1,11 @@
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.exe.config
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.exe
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.pdb
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Microsoft.Azure.ActiveDirectory.GraphClient.dll
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.dll
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.xml
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.exe
+C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.pdb
