@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Xml;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Azure.ActiveDirectory.GraphClient;
@@ -22,7 +23,8 @@ namespace GraphConsoleAppV3
         static void Main()
         {
             // get OAuth token using Client Credentials
-            string authString = "https://login.windows.net/" + "GraphDir1.onMicrosoft.com";
+            string tenantName = "GraphDir1.onMicrosoft.com";
+            string authString = "https://login.windows.net/" + tenantName;
      
             AuthenticationContext authenticationContext = new AuthenticationContext(authString,false);
 
@@ -141,7 +143,7 @@ namespace GraphConsoleAppV3
                 Console.WriteLine("User not found {0}", searchString);
             }
             
-            if (retrievedUser != null)
+            if (retrievedUser.UserPrincipalName != null)
             {
                 Console.WriteLine("\n Found User: " + retrievedUser.DisplayName + "  UPN: " + retrievedUser.UserPrincipalName);
 
@@ -373,8 +375,6 @@ namespace GraphConsoleAppV3
                 AuthenticationResult userAuthnResult = authenticationContext.AcquireToken(resource, clientIdForUserAuthn, redirectUri);
                 token = userAuthnResult.AccessToken;
                 Console.WriteLine("\n Welcome " + userAuthnResult.UserInfo.GivenName + " " + userAuthnResult.UserInfo.FamilyName);
-                //Console.WriteLine("Token: \nToken Type: {0} \nExpires: {1}",                        userAuthnResult.AccessTokenType, userAuthnResult.ExpiresOn);
-                //Console.WriteLine("RefreshToken: {0}", userAuthnResult.RefreshToken);
             }
             catch (ActiveDirectoryAuthenticationException ex)
             {
@@ -394,7 +394,7 @@ namespace GraphConsoleAppV3
             //*********************************************************************************************
             User userToBeAdded = new User();
             userToBeAdded.DisplayName = "Sample App Demo User";
-            userToBeAdded.UserPrincipalName = "SampleAppDemoUser@graphDir1.onMicrosoft.com";
+            userToBeAdded.UserPrincipalName = "SampleAppDemoUser@" + defaultDomain.Name;
             userToBeAdded.AccountEnabled = true;
             userToBeAdded.MailNickname = "SampleAppDemoUser";
             userToBeAdded.PasswordProfile = new PasswordProfile();
@@ -660,44 +660,7 @@ namespace GraphConsoleAppV3
                 Console.WriteLine("Permission Creation execption: " + graphException.ToString());
               }
 
-         //*********************************************************************************************
-         //Delete the new permission object
-         //*********************************************************************************************
-         /* TO DO - finish the Delete object code
-          
-            GraphObject retrievePermission = graphConnection.Get<Permission>(newPermission.ObjectId);
 
-            if (retrievePermission != null)
-            {
-                try 
-                {
-                    graphConnection.Delete(newPermission);
-                    Console.WriteLine("Deleting Permission object: " + retrievePermission.ObjectId);
-                }
-                catch(GraphException graphException)
-                {
-                    Console.WriteLine("Permission Deletion execption: " + graphException.ToString());
-                }
-            }
-          
-        */
-          
-            //*********************************************************************************************    
-            // Delete the Application object that was just created
-            // Deleting the Application object will also will automatically delete the associated SP object
-            //*********************************************************************************************
-            //if (newSP != null)
-            //{
-            //    try
-            //    {
-            //        graphConnection.Delete(newSP);
-            //        Console.WriteLine("Deleting Service Principal object: " + newSP.ObjectId);
-            //    }
-            //    catch (GraphException graphExcpetion)
-            //    {
-            //        Console.WriteLine("Service Principal Deletion execption: " + graphExcpetion.ToString());
-            //    }
-            //}
 
             if (retrievedApp.ObjectId != null)
             {
@@ -754,10 +717,9 @@ namespace GraphConsoleAppV3
             {       
                 if (responseItem.Failed)
                 {
-                    Console.WriteLine("Failed: {0} {1} {2}",
+                    Console.WriteLine("Failed: {0} {1}",
                                     responseItem.Exception.Code,
-                                    responseItem.Exception.ErrorMessage,
-                                    responseItem.Exception.InnerException.ToString());
+                                    responseItem.Exception.ErrorMessage);
                 }    
                 else
                 {

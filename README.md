@@ -40,22 +40,23 @@ Register the Sample app for your own tenant
 4.Click the Applications tab.
 5.In the drawer, click Add.
 6.Click "Add an application my organization is developing".
-7.Enter a friendly name for the application, for example "Console App for Azure AD", select "Web Application and/or Web API", and click next.
-8.For the sign-on URL, enter the base URL for the sample, which is by default  https://localhost:44322 .
-9.For the App ID URI, enter  https://<your_tenant_name>/WebAppGraphAPI , replacing  <your_tenant_name>  with the domain name of your Azure AD tenant. For Example "https://contoso.com/WebAppGraphAPI". Click OK to complete the registration.
+7.Enter a friendly name for the application, for example "Console App for Azure AD", select "Web Application and/or Web API", and click next. 
+8.For the Sign-on URL, enter a value (this is not used for the console app, so is only needed for this initial configuration):  "http://localhost"
+9.For the App ID URI, enter  http://localhost.  Click the checkmark to complete the initial configuration.
 10.While still in the Azure portal, click the Configure tab of your application.
 11.Find the Client ID value and copy it aside, you will need this later when configuring your application.
-12.In the Reply URL, add the reply URL address used to return the authorization code returned during Authorization code flow. For example: "https://localhost:44322/"
-13.Under the Keys section, select either a 1year or 2year key - the keyValue will be displayed after you save the configuration at the end - it will be displayed, and you should save this to a secure location. Note, that the key value is only displayed once, and you will not be able to retrieve it later.
+12.Under the Keys section, select either a 1year or 2year key - the keyValue will be displayed after you save the configuration at the end - it will be displayed, and you should save this to a secure location. Note, that the key value is only displayed once, and you will not be able to retrieve it later.
 
+13.Configure Permissions - under the "Permissions to other applications" section, you will configure permissions to access the Graph (Windows Azure Active Directory).
+For "Windows Azure Active Directory" under the first permission column (Application Permission:1"), select "Read directory data". 
+Notes: this configures the App to use OAuth Client Credentials, and have Read access permissions for the application. 
+14.Selct the Save button at the bottom of the screen - upon sucessful configuration, your Key value should now be displayed - please copy and store this value in a secure location.
 
-14.Configure Permissions - under the "Permissions to other applications" section, select application "Windows Azure Active Directory" (this is the Graph API), and under the second permission (Delegated permissions), select "Access your organization's directory" and "Enable sign-on and read users' profiles". The 2nd column (Application permission) is not needed for this demo app. Notes: the permission "Access your organization's directory" allows the application to access your organization's directory on behalf of the signed-in user - this is a delegation permission and must be consented by the Administrator for webApps (such as this demo app). The permission "Enable sign-on and read users' profiles" allows users to sign in to the application with their organizational accounts and lets the application read the profiles of signed-in users, such as their email address and contact information - this is a delegation permission, and can be consented to by the user. The other permissions, "Read Directory data" and "Read and write Directory data", are Delegation and Application Permissions, which only the Administrator can grant consent to.
+15.You will need to update the program.cs of this Application project with the updated values. From Visual Studio, open the project and program.cs file, find and update the string values of "clientId" and "clientSecret" with the Client ID and key values from Azure management portal. Update your tenant name for the authString value (e.g. contoso.onMicrosoft.com). 
 
+15. Go back to the Azure Management Portal, and add a 2nd application - select "Add an application my organization is developing", Enter a display name e.g. "Native Console App"- this time, select Native Client Application.  Enter a redirect Uri "http://localhost", Select the check mark to save.
+16. Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory" .  
+17. copy the Client ID value - this will be used to configure program.cs next, save the Application configuration.
+18. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step. Update the string "redirectUri" to have a  value matches the one you configured in the Azure manangement portal (e.g. http://localhost).
 
-15.Selct the Save button at the bottom of the screen - upon sucessful configuration, your Key value should now be displayed - please copy and store this value in a secure location.
-
-
-16.You will need to update the webconfig file of this Application project. From Visual Studio, open the web.config file, and under the section, modify "ida:ClientId" and "ida:AppKey" and " with the values from the previous steps. Also update the "ida:Tenant" with your Azure AD Tenant's domain name e.g. Contoso.onMicrosoft.com, (or Contoso.com if that domain is owned by your tenant).
-
-17.In  web.config  add this line in the  <system.web>  section:  <sessionState timeout="525600" /> . This increases the ASP.Net session state timeout to it's maximum value so that access tokens and refresh tokens cache in session state aren't cleared after the default timeout of 20 minutes.
-18.Build and run your application - you will need to authenticate with valid user credentials for your company when you run the application.
+19.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
