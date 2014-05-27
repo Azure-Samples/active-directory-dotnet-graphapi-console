@@ -54,9 +54,9 @@ Notes: this configures the App to use OAuth Client Credentials, and have Read ac
 
 15.You will need to update the program.cs of this Application project with the updated values. From Visual Studio, open the project and program.cs file, find and update the string values of "clientId" and "clientSecret" with the Client ID and key values from Azure management portal. Update your tenant name for the authString value (e.g. contoso.onMicrosoft.com). 
 
-16. Go back to the Azure Management Portal, and add a 2nd application - select "Add an application my organization is developing", Enter a display name e.g. "Native Console App"- this time, select Native Client Application. Enter a redirect Uri "http://localhost", Select the check mark to save.
-17. Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory" .  
-18. copy the Client ID value - this will be used to configure program.cs next, save the Application configuration.
-19. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step. Update the string "redirectUri" to have a  value matches the one you configured in the Azure manangement portal (e.g. http://localhost).
+15. Go back to the Azure Management Portal, and add a 2nd application - select "Add an application my organization is developing", Enter a display name e.g. "Native Console App"- this time, select Native Client Application.  Enter a redirect Uri "http://localhost", Select the check mark to save.
+16. Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory" .  
+17. copy the Client ID value - this will be used to configure program.cs next, save the Application configuration.
+18. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step. Update the string "redirectUri" to have a  value matches the one you configured in the Azure manangement portal (e.g. http://localhost).
 
-20.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
+19.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
