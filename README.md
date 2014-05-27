@@ -71,5 +71,4 @@ For "Windows Azure Active Directory" under the first permission column (Applicat
 17. Copy the Client ID value - this will be used to configure program.cs next - save the Application configuration.
 
 18. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step.
-
-19.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
+19. Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
