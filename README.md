@@ -6,7 +6,7 @@ Console App using Graph Client Library Version 1.0
 This console application is a .Net sample, using the Graph API Client library (Version 1.0) - it demonstrates common Read calls 
 to the Graph API including Getting Users, Groups, Group Membership, Roles, Tenant information, Service Principals, Applications.
 The second part of the sample app demonstrates common Write/Update/Delete options on Users, Groups, and shows how to execute 
-User License Assignement, updating a User's thumbnailPhoto and links.
+User License Assignment, updating a User's thumbnailPhoto and links.
 
 The sample incorporates using the Active Directory Authentication Library (ADAL) for authentication.  The first part of the console app is 
 Read-only, and uses OAuth Client Credentials to authenticate against the Demo Company.  The second part has Update operations, and 
@@ -25,9 +25,9 @@ From your shell or command line:
 Step 2: Run the sample in Visual Studio 2013
 The sample app is preconfigured to read data from a Demonstration company (GraphDir1.onMicrosoft.com) in Azure AD. 
 Run the sample application by selecting F5.  The second part of the app will require Admin credentials, you can simulate 
-authentication using thid demo user account: demoUser@graphDir1.onMicrosoft.com graphDem0 
+authentication using this demo user account: demoUser@graphDir1.onMicrosoft.com graphDem0 
 However, this is only a user account and does not have administrative permissions to execute updates - therefore, you
-will see "..unauthorized.." response errors when attemping any requests requiring admin permissions.  To see how updates
+will see "..unauthorized.." response errors when attempting any requests requiring admin permissions.  To see how updates
 work, you will need to configure and use this sample with your own tenant - see the next step.
 
 
@@ -51,7 +51,7 @@ Register the Sample app for your own tenant
 
 8.For the Sign-on URL, enter a value (this is not used for the console app, so is only needed for this initial configuration):  "http://localhost"
 
-9.For the App ID URI, enter  http://localhost.  Click the checkmark to complete the initial configuration.
+9.For the App ID URI, enter "http://localhost".  Click the checkmark to complete the initial configuration.
 
 10.While still in the Azure portal, click the Configure tab of your application.
 
@@ -62,9 +62,9 @@ Register the Sample app for your own tenant
 13.Configure Permissions - under the "Permissions to other applications" section, you will configure permissions to access the Graph (Windows Azure Active Directory).
 For "Windows Azure Active Directory" under the first permission column (Application Permission:1"), select "Read directory data". Notes: this configures the App to use OAuth Client Credentials, and have Read access permissions for the application. 
 
-14.Selct the Save button at the bottom of the screen - upon sucessful configuration, your Key value should now be displayed - please copy and store this value in a secure location.
+14.Select the Save button at the bottom of the screen - upon successful configuration, your Key value should now be displayed - please copy and store this value in a secure location.
 
-15.You will need to update the program.cs of this Application project with the updated values. From Visual Studio, open the project and program.cs file, find and update the string values of "clientId" and "clientSecret" with the Client ID and key values from Azure management portal. Update your tenant name for the authString value (e.g. contoso.onMicrosoft.com).
+15.You will need to update the program.cs of this Application project with the updated values. From Visual Studio, open the project and program.cs file, find and update the string values of "clientId" and "clientSecret" with the Client ID and key values from Azure management portal. Update your tenant name for the authString value (e.g. contoso.onMicrosoft.com).  Update the tenantId value for the string tenantId, with your tenantId.  Note: your tenantId can be discovered by opening the following metadata.xml document: https://login.windows.net/GraphDir1.onmicrosoft.com/FederationMetadata/2007-06/FederationMetadata.xml  - replace "graphDir1.onMicrosoft.com", with your tenant's domain value (any domain that is owned by the tenant will work).  The tenantId is a guid, that is part of the sts URL, returned in the first xml node's sts url ("EntityDescriptor"): e.g. "https://sts.windows.net/<tenantIdvalue>"
 
 16.Return to the Azure Management Portal, and add a 2nd app.  Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory".
 
@@ -72,4 +72,4 @@ For "Windows Azure Active Directory" under the first permission column (Applicat
 
 18.Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step.
 
-19.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
+19.Build and run your application - you will need to authenticate with valid tenant administrator credentials for your company when you run the application (required for the Create/Update/delete operations).
