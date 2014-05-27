@@ -70,6 +70,12 @@ namespace GraphConsoleAppV3
 
             //*********************************************************************
             // Get Tenant Details
+            // Note: update the string tenantId with your TenantId.
+            // This can be retrieved from the login Federation Metadata end point:             
+            // https://login.windows.net/GraphDir1.onmicrosoft.com/FederationMetadata/2007-06/FederationMetadata.xml
+            //  Replace "GraphDir1.onMicrosoft.com" with any domain owned by your organization
+            // The returned value from the first xml node "EntityDescriptor", will have a STS URL
+            // containing your tenantId e.g. "https://sts.windows.net/4fd2b2f2-ea27-4fe5-a8f3-7b1a7c975f34/" is returned from GraphDir1.onMicrosoft.com
             //*********************************************************************
             string tenantId = "4fd2b2f2-ea27-4fe5-a8f3-7b1a7c975f34";
             GraphObject tenant = graphConnection.Get(typeof(TenantDetail), tenantId);
