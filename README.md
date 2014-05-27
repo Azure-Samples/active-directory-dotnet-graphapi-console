@@ -68,8 +68,8 @@ For "Windows Azure Active Directory" under the first permission column (Applicat
 
 16. Return to the Azure Management Portal, and add a 2nd app.  Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory" .  
 
-17. Copy the Client ID value - this will be used to configure program.cs next, save the Application configuration.
+17. Copy the Client ID value - this will be used to configure program.cs next - save the Application configuration.
 
-18. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step. Update the string "redirectUri" to have a  value matches the one you configured in the Azure manangement portal (e.g. http://localhost).
+18. Open the program.cs file, and find the "redirectUri" string value, and replace it with "http://localhost", replace the "clientIdForUserAuthn" with the client ID value from the previous step.
 
 19.Build and run your application - you will need to authenticate with valid admininistrator credentials for your company when you run the application (required for the Create/Update/delete operations).
