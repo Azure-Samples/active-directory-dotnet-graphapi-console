@@ -64,6 +64,7 @@ namespace GraphConsoleAppV3
             Guid ClientRequestId = Guid.NewGuid();
             GraphSettings graphSettings = new GraphSettings();
             graphSettings.ApiVersion = "2013-11-08";
+            graphSettings.GraphDomainName = "graph.windows.net";
             GraphConnection graphConnection = new GraphConnection(token, ClientRequestId,graphSettings);
             VerifiedDomain initialDomain = new VerifiedDomain();
             VerifiedDomain defaultDomain = new VerifiedDomain();
@@ -579,7 +580,7 @@ namespace GraphConsoleAppV3
             KeyCredential.Usage = "Verify";
             appObject.KeyCredentials.Add(KeyCredential);
 
-            GraphObject newApp = new GraphObject();
+            GraphObject newApp = null;
             try
             {
                 newApp = graphConnection.Add(appObject);
@@ -603,7 +604,7 @@ namespace GraphConsoleAppV3
             newServicePrincpal.AccountEnabled = true;
             newServicePrincpal.AppId = retrievedApp.AppId;
 
-            GraphObject newSP = new GraphObject();
+            GraphObject newSP = null;
             try 
             {
                 newSP = graphConnection.Add<ServicePrincipal>(newServicePrincpal);
@@ -632,16 +633,16 @@ namespace GraphConsoleAppV3
                         Console.WriteLine("Error: " + graphException.ToString());
                         break;
                     }
-                               {
+                               
                     foreach (Permission permission in permissions.Results)
                     {
                         Console.WriteLine("Permission: {0}  Name: {1}", permission.ClientId, permission.Scope);
                     }
-                }
+                
             } while(permissions.PageToken != null);
 
             //*********************************************************************************************
-            //create new permission object
+            // Create new permission object
             //*********************************************************************************************
             Permission permissionObject = new Permission();
             permissionObject.ConsentType = "AllPrincipals";
@@ -655,7 +656,7 @@ namespace GraphConsoleAppV3
             //ClientId = objectId of servicePrincipal
             permissionObject.ClientId = newSP.ObjectId;
 
-            GraphObject newPermission = new GraphObject();
+            GraphObject newPermission = null;
               try
               {
                 newPermission = graphConnection.Add(permissionObject);
@@ -663,10 +664,12 @@ namespace GraphConsoleAppV3
               }
               catch (GraphException graphException)
               {
-                Console.WriteLine("Permission Creation execption: " + graphException.ToString());
+                Console.WriteLine("Permission Creation exception: " + graphException.ToString());
               }
 
-
+            //*********************************************************************************************
+            // Delete Application Objects
+            //*********************************************************************************************
 
             if (retrievedApp.ObjectId != null)
             {

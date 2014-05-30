@@ -9,3 +9,15 @@ C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityMode
 C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.xml
 C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.exe
 C:\GraphApp\GraphConsoleAppV3\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.pdb
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.exe.config
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.exe
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.pdb
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.exe
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\GraphConsoleAppV3.pdb
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.dll
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.csprojResolveAssemblyReference.cache
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Microsoft.Azure.ActiveDirectory.GraphClient.dll
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
+C:\Test\ConsoleApp-GraphAPI-DotNet-master\ConsoleApp-GraphAPI-DotNet-master\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.xml
