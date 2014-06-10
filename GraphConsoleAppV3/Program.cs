@@ -527,6 +527,44 @@ namespace GraphConsoleAppV3
                         Console.WriteLine("\nAdding user to group failed " + graphException.ToString());
                     }
                 }
+
+                //*********************************************************************************************
+                // Create a new Group
+                //*********************************************************************************************
+                Group CaliforniaEmployees = new Group();
+                CaliforniaEmployees.DisplayName = "California Employees";
+                CaliforniaEmployees.Description = "Employees in the state of California";
+                CaliforniaEmployees.MailNickname = "CalEmployees";
+                CaliforniaEmployees.MailEnabled = false;
+                CaliforniaEmployees.SecurityEnabled = true;
+                Group newGroup = null;
+                try
+                {
+                    newGroup = graphConnection.Add<Group>(CaliforniaEmployees);
+                    Console.WriteLine("\nNew Group {0} was created", newGroup.DisplayName);
+                }
+                catch (GraphException graphException)
+                {
+                    Console.WriteLine("\nError creating new Group " + graphException.ToString());
+                }
+
+                //*********************************************************************************************
+                // Add the new User member to the new Group
+                //*********************************************************************************************
+                if (newGroup.ObjectId != null)
+                {
+                    try
+                    {
+                        graphConnection.AddLink(newGroup, newlyCreatedUser, LinkProperty.Members);
+                        Console.WriteLine("\nUser {0} was added to Group {1}", newlyCreatedUser.DisplayName, retrievedGroup.DisplayName);
+                    }
+                    catch (GraphException graphException)
+                    {
+                        Console.WriteLine("\nAdding user to group failed " + graphException.ToString());
+                    }
+                }
+
+
                 //*********************************************************************************************
                 // Delete the user that we just created
                 //*********************************************************************************************
@@ -542,6 +580,23 @@ namespace GraphConsoleAppV3
                         Console.WriteLine("Deleting User failed" + graphException.ToString());
                     }
                 }
+
+                //*********************************************************************************************
+                // Delete the Group that we just created
+                //*********************************************************************************************
+                if (newGroup.ObjectId != null)
+                {
+                    try
+                    {
+                        graphConnection.Delete(newGroup);
+                        Console.WriteLine("\nGroup {0} was deleted", newGroup.DisplayName);
+                    }
+                    catch (GraphException graphException)
+                    {
+                        Console.WriteLine("Deleting Group failed" + graphException.ToString());
+                    }
+                }
+
             }
 
             //*********************************************************************************************
