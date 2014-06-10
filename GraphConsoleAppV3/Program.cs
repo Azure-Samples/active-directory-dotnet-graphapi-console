@@ -556,7 +556,7 @@ namespace GraphConsoleAppV3
                     try
                     {
                         graphConnection.AddLink(newGroup, newlyCreatedUser, LinkProperty.Members);
-                        Console.WriteLine("\nUser {0} was added to Group {1}", newlyCreatedUser.DisplayName, retrievedGroup.DisplayName);
+                        Console.WriteLine("\nUser {0} was added to Group {1}", newlyCreatedUser.DisplayName, newGroup.DisplayName);
                     }
                     catch (GraphException graphException)
                     {
