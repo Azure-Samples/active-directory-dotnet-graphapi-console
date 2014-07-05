@@ -24,8 +24,8 @@ From your shell or command line:
 Step 2: Run the sample in Visual Studio 2013
 The sample app is preconfigured to read data from a Demonstration company (GraphDir1.onMicrosoft.com) in Azure AD. 
 Run the sample application by selecting F5.  The second part of the app will require Admin credentials, you can simulate 
-authentication using this demo user account: demoUser@graphDir1.onMicrosoft.com graphDem0 
-However, this is only a user account and does not have administrative permissions to execute updates - therefore, you
+authentication using this demo user account: userName =  demoUser@graphDir1.onMicrosoft.com, password = graphDem0 
+ However, this is only a user account and does not have administrative permissions to execute updates - therefore, you
 will see "..unauthorized.." response errors when attempting any requests requiring admin permissions.  To see how updates
 work, you will need to configure and use this sample with your own tenant - see the next step.
 
