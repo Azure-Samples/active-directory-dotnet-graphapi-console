@@ -6,13 +6,12 @@ Console App using Graph Client Library Version 1.0
 This console application is a .Net sample, using the Graph API Client library (Version 1.0) - it demonstrates common Read calls 
 to the Graph API including Getting Users, Groups, Group Membership, Roles, Tenant information, Service Principals, Applications.
 The second part of the sample app demonstrates common Write/Update/Delete options on Users, Groups, and shows how to execute 
-User License Assignment, updating a User's thumbnailPhoto and links.
+User License Assignment, updating a User's thumbnailPhoto and links, etc.
 
-The sample incorporates using the Active Directory Authentication Library (ADAL) for authentication.  The first part of the console app is 
-Read-only, and uses OAuth Client Credentials to authenticate against the Demo Company.  The second part has Update operations, and 
+The sample incorporates using the Active Directory Authentication Library (ADAL) for authentication.  The first part of the console app is Read-only, and uses OAuth Client Credentials to authenticate against the Demo Company. Note: you will need to configure a 2nd application (with seperate ClientId (AppId)) - the second part has Update operations, and 
 requires User credentials (using the OAuth Authorization Code flow).  Update operations are not permitted using this Demo company -
 to try these, you will need to update the application configuration to be used with your own Azure AD tenant, and will need
-to configure applications accordingly.  To do this:
+to configure applications accordingly. To execute update operations, you will need to logon with an account that has Administrative permissions.   To configure the app:
 
 
 
@@ -66,7 +65,7 @@ For "Windows Azure Active Directory" under the first permission column (Applicat
 
 15.You will need to update the program.cs of this Application project with the updated values. From Visual Studio, open the project and program.cs file, find and update the string values of "clientId" and "clientSecret" with the Client ID and key values from Azure management portal. Update your tenant name for the authString value (e.g. contoso.onMicrosoft.com).  Update the tenantId value for the string tenantId, with your tenantId.  Note: your tenantId can be discovered by opening the following metadata.xml document: https://login.windows.net/GraphDir1.onmicrosoft.com/FederationMetadata/2007-06/FederationMetadata.xml  - replace "graphDir1.onMicrosoft.com", with your tenant's domain value (any domain that is owned by the tenant will work).  The tenantId is a guid, that is part of the sts URL, returned in the first xml node's sts url ("EntityDescriptor"): e.g. "https://sts.windows.net/<tenantIdvalue>"
 
-16.Return to the Azure Management Portal, and add a 2nd app.  Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory".
+16.Now Configure a 2nd application object to run the update portion of this app: return to the Azure Management Portal, and add a 2nd app.  Select "configure" from the top tab - under "permissions to other applications" select the DelegatedPermissions:1 drop down menu for the Graph (Windows Azure Active Directory), and select "Access Your organization's directory".
 
 17.Copy the Client ID value - this will be used to configure program.cs next - save the Application configuration.
 
