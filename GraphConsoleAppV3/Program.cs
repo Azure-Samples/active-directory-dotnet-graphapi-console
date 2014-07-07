@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Xml;
+using System.Net;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Azure.ActiveDirectory.GraphClient;
@@ -39,7 +40,8 @@ namespace GraphConsoleAppV3
                 AuthenticationResult authenticationResult = authenticationContext.AcquireToken(resource, clientCred);
                 token = authenticationResult.AccessToken;
             }
-            catch (ActiveDirectoryAuthenticationException ex)
+                
+            catch (AuthenticationException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Acquiring a token failed with the following error: {0}", ex.Message);
@@ -376,14 +378,14 @@ namespace GraphConsoleAppV3
             //*********************************************************************************************
             var redirectUri = new Uri("https://localhost");
             string clientIdForUserAuthn = "66133929-66a4-4edc-aaee-13b04b03207d";
-
+            AuthenticationResult userAuthnResult = null;
             try
             {
-                AuthenticationResult userAuthnResult = authenticationContext.AcquireToken(resource, clientIdForUserAuthn, redirectUri);
-                token = userAuthnResult.AccessToken;
+                userAuthnResult = authenticationContext.AcquireToken(resource, clientIdForUserAuthn, redirectUri, PromptBehavior.Always);
+                token = userAuthnResult.AccessToken;                
                 Console.WriteLine("\n Welcome " + userAuthnResult.UserInfo.GivenName + " " + userAuthnResult.UserInfo.FamilyName);
             }
-            catch (ActiveDirectoryAuthenticationException ex)
+            catch (AuthenticationException ex)
             {
                 string message = ex.Message;
                 if (ex.InnerException != null)
@@ -792,7 +794,47 @@ namespace GraphConsoleAppV3
                                      !responseItem.Failed);
                 }
             }
-            
+
+            // this next section shows how to access the signed-in user's mailbox.
+            // First we get a new token for Office365 Exchange Online Resource
+            // using the multi-resource refresh token tha was included when the previoius
+            // token was acquired. 
+            // We can now request a new token for Office365 Exchange Online. 
+            //
+            string office365Emailresource = "https://outlook.office365.com/";
+            string office365Token = null;
+            if (userAuthnResult.IsMultipleResourceRefreshToken)
+            {
+                userAuthnResult = authenticationContext.AcquireTokenByRefreshToken(userAuthnResult.RefreshToken, clientIdForUserAuthn, office365Emailresource);
+                office365Token = userAuthnResult.AccessToken;
+
+                //
+                // Call the Office365 API and retrieve the top 5 items from the user's mailbox.
+                //
+                string requestUrl = "https://outlook.office365.com/EWS/OData/Me/Inbox/Messages?$top=5";
+                WebRequest getMailboxRequest;
+                getMailboxRequest = WebRequest.Create(requestUrl);
+                getMailboxRequest.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + office365Token);
+                Console.WriteLine("\n Getting the User's Mailbox Contents \n");
+
+                //
+                // Read the contents of the user's mailbox, and display to the console.
+                //
+                Stream objStream;
+                objStream = getMailboxRequest.GetResponse().GetResponseStream();
+                StreamReader objReader = new StreamReader(objStream);
+
+                string sLine = "";
+                int i = 0;
+
+                while (sLine != null)
+                {
+                    i++;
+                    sLine = objReader.ReadLine();
+                    if (sLine != null)
+                        Console.WriteLine("{0}:{1}", i, sLine);
+                }
+            }
 
             //*********************************************************************************************
             // End of Demo Console App
@@ -800,16 +842,6 @@ namespace GraphConsoleAppV3
             Console.WriteLine("\nCompleted at {0} \n ClientRequestId: {1}", CurrentDateTime, ClientRequestId);
             Console.ReadKey();
             return;
-
-            // Todo
-            // Get objects owned by a User
-            // Create a Guest User (alt-sec id)
-            // Restore a soft-deleted Application
-            
-            /*
-             $expand
-             Parallel Group membership provisioning
-            */
         }
     }
 }
