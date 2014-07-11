@@ -200,7 +200,7 @@ namespace GraphConsoleAppV3
 
 
                 //*********************************************************************
-                // get the User's Group and Role membership, getting the complete objects
+                // get the User's Group and Role membership, getting the complete set of objects
                 //*********************************************************************
                 PagedResults<GraphObject> memberOfObjects = graphConnection.GetLinkedObjects(retrievedUser, LinkProperty.MemberOf, null, top);
                 foreach (GraphObject graphObject in memberOfObjects.Results)
@@ -288,7 +288,7 @@ namespace GraphConsoleAppV3
                 IList<GraphObject> members = graphConnection.GetAllDirectLinks(graphObj, LinkProperty.Members);
                 if (members.Count > 0)
                 {
-                    Console.WriteLine("Group Membership");
+                    Console.WriteLine(" Members:");
                     foreach (GraphObject graphObject in members)
                     {
                         if (graphObject.ODataTypeName.Contains("User"))
@@ -418,7 +418,7 @@ namespace GraphConsoleAppV3
             }
             catch (GraphException graphException)
             {
-                Console.WriteLine("\nError creating new user " + graphException.ToString());
+                Console.WriteLine("\nError creating new user {0} {1}", graphException.Code, graphException.Message);               
             }
 
             //*********************************************************************************************
@@ -443,7 +443,7 @@ namespace GraphConsoleAppV3
                 }
                 catch (GraphException graphException)
                 {
-                    Console.WriteLine("\nError Updating the user " + graphException.ToString());
+                    Console.WriteLine("\nError Updating the user {0} {1}", graphException.Code, graphException.Message);
                 }
 
 
@@ -508,7 +508,7 @@ namespace GraphConsoleAppV3
                             }
                             catch (GraphException graphException)
                             {
-                                Console.WriteLine("\nLicense assingment failed " + graphException.ToString());
+                                Console.WriteLine("\nLicense assingment failed {0} {1}", graphException.Code, graphException.Message);
                             }
 
                         }
@@ -526,7 +526,7 @@ namespace GraphConsoleAppV3
                     }
                     catch (GraphException graphException)
                     {
-                        Console.WriteLine("\nAdding user to group failed " + graphException.ToString());
+                        Console.WriteLine("\nAdding user to group failed {0} {1}", graphException.Code, graphException.Message);
                     }
                 }
 
@@ -547,7 +547,7 @@ namespace GraphConsoleAppV3
                 }
                 catch (GraphException graphException)
                 {
-                    Console.WriteLine("\nError creating new Group " + graphException.ToString());
+                    Console.WriteLine("\nError creating new Group {0} {1}", graphException.Code, graphException.Message);
                 }
 
                 //*********************************************************************************************
@@ -562,7 +562,7 @@ namespace GraphConsoleAppV3
                     }
                     catch (GraphException graphException)
                     {
-                        Console.WriteLine("\nAdding user to group failed " + graphException.ToString());
+                        Console.WriteLine("\nAdding user to group failed {0} {1}", graphException.Code, graphException.Message);
                     }
                 }
 
@@ -579,7 +579,7 @@ namespace GraphConsoleAppV3
                     }
                     catch (GraphException graphException)
                     {
-                        Console.WriteLine("Deleting User failed" + graphException.ToString());
+                        Console.WriteLine("Deleting User failed {0} {1}", graphException.Code, graphException.Message);
                     }
                 }
 
@@ -595,7 +595,7 @@ namespace GraphConsoleAppV3
                     }
                     catch (GraphException graphException)
                     {
-                        Console.WriteLine("Deleting Group failed" + graphException.ToString());
+                        Console.WriteLine("Deleting Group failed: {0} {1}", graphException.Code, graphException.Message);
                     }
                 }
 
@@ -645,99 +645,102 @@ namespace GraphConsoleAppV3
             }
             catch (GraphException graphException)
             {
-                Console.WriteLine("Application Creation execption: " + graphException.Message);
+                Console.WriteLine("Application Creation execption: {0} {1}", graphException.Code, graphException.Message);
             }
             
             // Get the application object that was just created
-
-            GraphObject app = graphConnection.Get(typeof(Application), newApp.ObjectId);
-            Application retrievedApp = (Application)app;
-
-            //*********************************************************************************************
-            // create a new Service principal
-            //*********************************************************************************************
-            ServicePrincipal newServicePrincpal = new ServicePrincipal();
-            newServicePrincpal.DisplayName = "Test-Demo App";
-            newServicePrincpal.AccountEnabled = true;
-            newServicePrincpal.AppId = retrievedApp.AppId;
-
-            GraphObject newSP = null;
-            try 
+            if (newApp != null)
             {
-                newSP = graphConnection.Add<ServicePrincipal>(newServicePrincpal);
-            //    newSP = graphConnection.Add(newServicePrincpal);
-                Console.WriteLine("New Service Principal created: " + newSP.ObjectId);
-            }
-            catch (GraphException graphException)
-            {
-                Console.WriteLine("Service Principal Creation execption: " + graphException.ToString());
-            }
+                GraphObject app = graphConnection.Get(typeof(Application), newApp.ObjectId);
+                Application retrievedApp = (Application)app;
 
-            //*********************************************************************************************
-            // get all Permission Objects
-            //*********************************************************************************************
-            Console.WriteLine("\n Getting Permissions");
-            filter.Top = 999;
-            PagedResults<Permission> permissions = new PagedResults<Permission>();
-            do 
-            {
+                //*********************************************************************************************
+                // create a new Service principal
+                //*********************************************************************************************
+                ServicePrincipal newServicePrincpal = new ServicePrincipal();
+                newServicePrincpal.DisplayName = "Test-Demo App";
+                newServicePrincpal.AccountEnabled = true;
+                newServicePrincpal.AppId = retrievedApp.AppId;
+
+                GraphObject newSP = null;
+                try
+                {
+                    newSP = graphConnection.Add<ServicePrincipal>(newServicePrincpal);
+                    //    newSP = graphConnection.Add(newServicePrincpal);
+                    Console.WriteLine("New Service Principal created: " + newSP.ObjectId);
+                }
+                catch (GraphException graphException)
+                {
+                    Console.WriteLine("Service Principal Creation execption: {0} {1}", graphException.Code, graphException.Message);
+                }
+
+
+                //*********************************************************************************************
+                // get all Permission Objects
+                //*********************************************************************************************
+                Console.WriteLine("\n Getting Permissions");
+                filter.Top = 999;
+                PagedResults<Permission> permissions = new PagedResults<Permission>();
+                do
+                {
                     try
                     {
                         permissions = graphConnection.List<Permission>(permissions.PageToken, filter);
                     }
                     catch (GraphException graphException)
                     {
-                        Console.WriteLine("Error: " + graphException.ToString());
+                        Console.WriteLine("Error: {0} {1}", graphException.Code, graphException.Message);
                         break;
                     }
-                               
+
                     foreach (Permission permission in permissions.Results)
                     {
                         Console.WriteLine("Permission: {0}  Name: {1}", permission.ClientId, permission.Scope);
                     }
-                
-            } while(permissions.PageToken != null);
 
-            //*********************************************************************************************
-            // Create new permission object
-            //*********************************************************************************************
-            Permission permissionObject = new Permission();
-            permissionObject.ConsentType = "AllPrincipals";
-            permissionObject.Scope = "user_impersonation";
-            permissionObject.StartTime = DateTime.Now;
-            permissionObject.ExpiryTime = (DateTime.Now).AddMonths(12);
+                } while (permissions.PageToken != null);
 
-            // resourceId is objectId of the resource, in this case objectId of AzureAd (Graph API)
-            permissionObject.ResourceId = "dbf73c3e-e80b-495b-a82f-2f772bb0a417";
-            
-            //ClientId = objectId of servicePrincipal
-            permissionObject.ClientId = newSP.ObjectId;
+                //*********************************************************************************************
+                // Create new permission object
+                //*********************************************************************************************
+                Permission permissionObject = new Permission();
+                permissionObject.ConsentType = "AllPrincipals";
+                permissionObject.Scope = "user_impersonation";
+                permissionObject.StartTime = DateTime.Now;
+                permissionObject.ExpiryTime = (DateTime.Now).AddMonths(12);
 
-            GraphObject newPermission = null;
-              try
-              {
-                newPermission = graphConnection.Add(permissionObject);
-                Console.WriteLine("New Permission object created: " + newPermission.ObjectId);
-              }
-              catch (GraphException graphException)
-              {
-                Console.WriteLine("Permission Creation exception: " + graphException.ToString());
-              }
+                // resourceId is objectId of the resource, in this case objectId of AzureAd (Graph API)
+                permissionObject.ResourceId = "dbf73c3e-e80b-495b-a82f-2f772bb0a417";
 
-            //*********************************************************************************************
-            // Delete Application Objects
-            //*********************************************************************************************
+                //ClientId = objectId of servicePrincipal
+                permissionObject.ClientId = newSP.ObjectId;
 
-            if (retrievedApp.ObjectId != null)
-            {
+                GraphObject newPermission = null;
                 try
                 {
-                    graphConnection.Delete(retrievedApp);
-                    Console.WriteLine("Deleting Application object: " + retrievedApp.ObjectId);
+                    newPermission = graphConnection.Add(permissionObject);
+                    Console.WriteLine("New Permission object created: " + newPermission.ObjectId);
                 }
                 catch (GraphException graphException)
                 {
-                    Console.WriteLine("Application Deletion execption: " + graphException.ToString());
+                    Console.WriteLine("Permission Creation exception: {0} {1}", graphException.Code, graphException.Message);
+                }
+
+                //*********************************************************************************************
+                // Delete Application Objects
+                //*********************************************************************************************
+
+                if (retrievedApp.ObjectId != null)
+                {
+                    try
+                    {
+                        graphConnection.Delete(retrievedApp);
+                        Console.WriteLine("Deleting Application object: " + retrievedApp.ObjectId);
+                    }
+                    catch (GraphException graphException)
+                    {
+                        Console.WriteLine("Application Deletion execption: {0} {1}", graphException.Code, graphException.Message);
+                    }
                 }
             }
 
@@ -809,9 +812,9 @@ namespace GraphConsoleAppV3
                 office365Token = userAuthnResult.AccessToken;
 
                 //
-                // Call the Office365 API and retrieve the top 5 items from the user's mailbox.
+                // Call the Office365 API and retrieve the top item from the user's mailbox.
                 //
-                string requestUrl = "https://outlook.office365.com/EWS/OData/Me/Inbox/Messages?$top=5";
+                string requestUrl = "https://outlook.office365.com/EWS/OData/Me/Inbox/Messages?$top=1";
                 WebRequest getMailboxRequest;
                 getMailboxRequest = WebRequest.Create(requestUrl);
                 getMailboxRequest.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + office365Token);
@@ -820,19 +823,28 @@ namespace GraphConsoleAppV3
                 //
                 // Read the contents of the user's mailbox, and display to the console.
                 //
-                Stream objStream;
-                objStream = getMailboxRequest.GetResponse().GetResponseStream();
-                StreamReader objReader = new StreamReader(objStream);
-
-                string sLine = "";
-                int i = 0;
-
-                while (sLine != null)
+                Stream objStream = null;
+                try
                 {
-                    i++;
-                    sLine = objReader.ReadLine();
-                    if (sLine != null)
-                        Console.WriteLine("{0}:{1}", i, sLine);
+                    objStream = getMailboxRequest.GetResponse().GetResponseStream();
+                    StreamReader objReader = new StreamReader(objStream);
+
+                    string sLine = "";
+                    int i = 0;
+
+                    while (sLine != null)
+                    {
+                        i++;
+                        sLine = objReader.ReadLine();
+                        if (sLine != null)
+                        {
+                            Console.WriteLine("{0}:{1}", i, sLine);
+                        }                           
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\n Error Getting User's Mailbox: {0} \n", ex.Message);
                 }
             }
 
