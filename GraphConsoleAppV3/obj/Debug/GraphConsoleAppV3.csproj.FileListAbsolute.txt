@@ -5,9 +5,7 @@ C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.dll
-C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.pdb
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml
-C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.pdb
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\bin\Debug\Newtonsoft.Json.xml
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.csprojResolveAssemblyReference.cache
 C:\Users\dastrock\Source\Repos\ConsoleApp-GraphAPI-DotNet\GraphConsoleAppV3\obj\Debug\GraphConsoleAppV3.exe
