@@ -151,6 +151,30 @@
             You can use this code for purposes such as implementing retry logic or error investigation.
             </summary>
         </member>
+        <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException">
+            <summary>
+            The exception type thrown when a token cannot be acquired silently.
+            </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor">
+            <summary>
+             Initializes a new instance of the exception class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the exception class with serialized data.
+            </summary>
+            <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
+        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalSilentTokenAcquisitionException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the System.Runtime.Serialization.SerializationInfo with information about the exception.
+            </summary>
+            <param name="info">The System.Runtime.Serialization.SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalUserMismatchException">
             <summary>
             The exception type thrown when user returned by service does not match user in the request.
@@ -959,6 +983,11 @@
             'authority' is not in the list of valid addresses.
             </summary>
         </member>
+        <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.AuthorityValidationFailed">
+            <summary>
+            Authority validation failed.
+            </summary>
+        </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.AdalError.AssemblyLoadFailed">
             <summary>
             Loading required assembly failed.
@@ -1518,22 +1547,25 @@
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType">
             <summary>
-            Indicates the type of UserIdentifier
+            Indicates the type of <see cref="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier"/>
             </summary>
         </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.UniqueId">
             <summary>
-            UniqueId
+            When a <see cref="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier"/> of this type is passed in a token acquisition operation,
+            the operation is guaranteed to return a token issued for the user with corresponding <see cref="P:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier.UniqueId"/> or fail.
             </summary>
         </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.OptionalDisplayableId">
             <summary>
-            OptionalDisplayableId
+            When a <see cref="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier"/> of this type is passed in a token acquisition operation,
+            the operation restricts cache matches to the value provided and injects it as a hint in the authentication experience. However the end user could overwrite that value, resulting in a token issued to a different account than the one specified in the <see cref="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier"/> in input.
             </summary>
         </member>
         <member name="F:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifierType.RequiredDisplayableId">
             <summary>
-            RequiredDisplayableId
+            When a <see cref="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier"/> of this type is passed in a token acquisition operation,
+            the operation is guaranteed to return a token issued for the user with corresponding <see cref="P:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier.DisplayableId"/> (UPN or email) or fail
             </summary>
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.UserIdentifier">
@@ -1635,14 +1667,6 @@
             Containing certificate used to create client assertion.
             </summary>
         </member>
-        <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.ClientAssertionCertificate.#ctor(System.String,System.Security.Cryptography.X509Certificates.X509Certificate2,System.String)">
-            <summary>
-            Constructor to create credential with client Id and certificate.
-            </summary>
-            <param name="clientId">Identifier of the client requesting the token.</param>
-            <param name="certificate">The certificate used as credential.</param>
-            <param name="clientAssertionJwtIdentifier">Identifier of the client jwt token.</param>
-        </member>
         <member name="M:Microsoft.IdentityModel.Clients.ActiveDirectory.ClientAssertionCertificate.#ctor(System.String,System.Security.Cryptography.X509Certificates.X509Certificate2)">
             <summary>
             Constructor to create credential with client Id and certificate.
@@ -1663,11 +1687,6 @@
         <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.ClientAssertionCertificate.Certificate">
             <summary>
             Gets the certificate used as credential.
-            </summary>
-        </member>
-        <member name="P:Microsoft.IdentityModel.Clients.ActiveDirectory.ClientAssertionCertificate.ClientAssertionJwtIdentifier">
-            <summary>
-            Gets the identifier of the client jwt token.
             </summary>
         </member>
         <member name="T:Microsoft.IdentityModel.Clients.ActiveDirectory.ClientCredential">
