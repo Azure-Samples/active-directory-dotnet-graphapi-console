@@ -11,7 +11,7 @@ The sample incorporates using the Active Directory Authentication Library (ADAL)
 Step 1: Clone or download this repository
 From your shell or command line:
 
- git clone git@github.com:AzureADSamples/ConsoleApp-GraphAPI-DotNet.git 
+`git clone https://github.com/AzureADSamples/ConsoleApp-GraphAPI-DotNet.git`
 
 
 Step 2: Run the sample in Visual Studio 2013
