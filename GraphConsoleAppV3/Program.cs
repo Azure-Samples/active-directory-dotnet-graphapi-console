@@ -772,7 +772,7 @@ namespace GraphConsoleAppV3
             //*********************************************************************************************
             // Create a new Application object with App Role Assignment (Direct permission)
             //*********************************************************************************************
-            Application appObject = new Application { DisplayName = "Test-Demo App" + Helper.GetRandomString(8) };
+            Application appObject = new Application {DisplayName = "Test-Demo App" + Helper.GetRandomString(8)};
             appObject.IdentifierUris.Add("https://localhost/demo/" + Guid.NewGuid());
             appObject.ReplyUrls.Add("https://localhost/demo");
             AppRole appRole = new AppRole();
@@ -857,6 +857,7 @@ namespace GraphConsoleAppV3
             }
 
             #endregion
+
             #region Get Devices
 
             //*********************************************************************************************
