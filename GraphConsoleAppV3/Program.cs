@@ -770,11 +770,19 @@ namespace GraphConsoleAppV3
             #region Create Application
 
             //*********************************************************************************************
-            // Create a new Application object
+            // Create a new Application object with App Role Assignment (Direct permission)
             //*********************************************************************************************
-            Application appObject = new Application {DisplayName = "Test-Demo App" + Helper.GetRandomString(8)};
+            Application appObject = new Application { DisplayName = "Test-Demo App" + Helper.GetRandomString(8) };
             appObject.IdentifierUris.Add("https://localhost/demo/" + Guid.NewGuid());
             appObject.ReplyUrls.Add("https://localhost/demo");
+            AppRole appRole = new AppRole();
+            appRole.Id = Guid.NewGuid();
+            appRole.IsEnabled = true;
+            appRole.AllowedMemberTypes.Add("User");
+            appRole.DisplayName = "Something";
+            appRole.Description = "Anything";
+            appRole.Value = "policy.write";
+            appObject.AppRoles.Add(appRole);
 
             // created Keycredential object for the new App object
             KeyCredential keyCredential = new KeyCredential
@@ -825,6 +833,30 @@ namespace GraphConsoleAppV3
 
             #endregion
 
+            #region Assign Direct Permission
+
+            try
+            {
+                if (appObject.ObjectId != null && retrievedUser.ObjectId != null && newServicePrincpal.ObjectId != null)
+                {
+                    AppRoleAssignment appRoleAssignment = new AppRoleAssignment();
+                    appRoleAssignment.Id = appRole.Id;
+                    appRoleAssignment.ResourceId = Guid.Parse(newServicePrincpal.ObjectId);
+                    appRoleAssignment.PrincipalType = "User";
+                    appRoleAssignment.PrincipalId = Guid.Parse(retrievedUser.ObjectId);
+                    retrievedUser.AppRoleAssignments.Add(appRoleAssignment);
+
+                    retrievedUser.UpdateAsync().Wait();
+                    Console.WriteLine("User {0} is successfully assigned direct permission.", retrievedUser.DisplayName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Direct Permission Assignment failed: {0} {1}", e.Message,
+                    e.InnerException != null ? e.InnerException.Message : "");
+            }
+
+            #endregion
             #region Get Devices
 
             //*********************************************************************************************
