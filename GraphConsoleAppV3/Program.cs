@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Azure.ActiveDirectory.GraphClient;
 using Microsoft.Azure.ActiveDirectory.GraphClient.Extensions;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 #endregion
 
@@ -111,8 +112,8 @@ namespace GraphConsoleAppV3
                 newUser.MailNickname = "SampleAppDemoUserManager";
                 newUser.PasswordProfile = new PasswordProfile
                 {
-                    password = "TempP@ssw0rd!",
-                    forceChangePasswordNextLogin = true
+                    Password = "TempP@ssw0rd!",
+                    ForceChangePasswordNextLogin = true
                 };
                 newUser.UsageLocation = "US";
                 try
@@ -153,10 +154,10 @@ namespace GraphConsoleAppV3
 
             #endregion
 
-            #region Create a User with a temp password
+            #region Create a User with a temp Password
 
             //*********************************************************************************************
-            // Create a new User with a temp password
+            // Create a new User with a temp Password
             //*********************************************************************************************
             IUser userToBeAdded = new User();
             userToBeAdded.DisplayName = "Sample App Demo User";
@@ -165,8 +166,8 @@ namespace GraphConsoleAppV3
             userToBeAdded.MailNickname = "SampleAppDemoUser";
             userToBeAdded.PasswordProfile = new PasswordProfile
             {
-                password = "TempP@ssw0rd!",
-                forceChangePasswordNextLogin = true
+                Password = "TempP@ssw0rd!",
+                ForceChangePasswordNextLogin = true
             };
             userToBeAdded.UsageLocation = "US";
             try
@@ -189,15 +190,15 @@ namespace GraphConsoleAppV3
             //*********************************************************************************************
             if (userToBeAdded.ObjectId != null)
             {
-                // update User's city and reset their User's password
+                // update User's city and reset their User's Password
                 userToBeAdded.City = "Seattle";
                 userToBeAdded.Country = "UK";
-                PasswordProfile passwordProfile = new PasswordProfile
+                PasswordProfile PasswordProfile = new PasswordProfile
                 {
-                    password = "newP@ssw0rd!",
-                    forceChangePasswordNextLogin = false
+                    Password = "newP@ssw0rd!",
+                    ForceChangePasswordNextLogin = false
                 };
-                userToBeAdded.PasswordProfile = passwordProfile;
+                userToBeAdded.PasswordProfile = PasswordProfile;
                 userToBeAdded.PasswordPolicies = "DisablePasswordExpiration, DisableStrongPassword";
                 try
                 {
@@ -258,9 +259,17 @@ namespace GraphConsoleAppV3
                     Console.WriteLine("\n Assign User {0}, {1} as Manager.", retrievedUser.DisplayName,
                         newUser.DisplayName);
                     retrievedUser.Manager = newUser as DirectoryObject;
-                    newUser.UpdateAsync().Wait();
-                    Console.Write("User {0} is successfully assigned {1} as Manager.", retrievedUser.DisplayName,
-                        newUser.DisplayName);
+                    try
+                    {
+                        newUser.UpdateAsync().Wait();
+                        Console.Write("User {0} is successfully assigned {1} as Manager.", retrievedUser.DisplayName,
+                            newUser.DisplayName);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("\nError assigning manager to user. {0} {1}", e.Message,
+                            e.InnerException != null ? e.InnerException.Message : "");
+                    }
                 }
 
                 #endregion
@@ -295,22 +304,30 @@ namespace GraphConsoleAppV3
                 {
                     Console.WriteLine("\n Getting User{0}'s Direct Reports.", newUser.DisplayName);
                     IUserFetcher newUserFetcher = (IUserFetcher) newUser;
-                    IPagedCollection<IDirectoryObject> directReports =
-                        newUserFetcher.DirectReports.ExecuteAsync().Result;
-                    do
+                    try
                     {
-                        List<IDirectoryObject> directoryObjects = directReports.CurrentPage.ToList();
-                        foreach (IDirectoryObject directoryObject in directoryObjects)
+                        IPagedCollection<IDirectoryObject> directReports =
+                            newUserFetcher.DirectReports.ExecuteAsync().Result;
+                        do
                         {
-                            if (directoryObject is User)
+                            List<IDirectoryObject> directoryObjects = directReports.CurrentPage.ToList();
+                            foreach (IDirectoryObject directoryObject in directoryObjects)
                             {
-                                User directReport = directoryObject as User;
-                                Console.WriteLine("User {0} Direct Report is {1}", newUser.UserPrincipalName,
-                                    directReport.UserPrincipalName);
+                                if (directoryObject is User)
+                                {
+                                    User directReport = directoryObject as User;
+                                    Console.WriteLine("User {0} Direct Report is {1}", newUser.UserPrincipalName,
+                                        directReport.UserPrincipalName);
+                                }
                             }
-                        }
-                        directReports = directReports.GetNextPageAsync().Result;
-                    } while (directReports != null && directReports.MorePagesAvailable);
+                            directReports = directReports.GetNextPageAsync().Result;
+                        } while (directReports != null && directReports.MorePagesAvailable);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("\nError getting direct reports of user. {0} {1}", e.Message,
+                            e.InnerException != null ? e.InnerException.Message : "");
+                    }
                 }
 
                 #endregion
@@ -320,13 +337,13 @@ namespace GraphConsoleAppV3
                 //*********************************************************************
                 // get a list of Group IDs that the user is a member of
                 //*********************************************************************
-                const bool securityEnabledOnly = false;
-                IEnumerable<string> memberGroups = retrievedUser.GetMemberGroupsAsync(securityEnabledOnly).Result;
-                Console.WriteLine("\n {0} is a member of the following Groups (IDs)", retrievedUser.DisplayName);
-                foreach (String memberGroup in memberGroups)
-                {
-                    Console.WriteLine("Member of Group ID: " + memberGroup);
-                }
+                //const bool securityEnabledOnly = false;
+                //IEnumerable<string> memberGroups = retrievedUser.GetMemberGroupsAsync(securityEnabledOnly).Result;
+                //Console.WriteLine("\n {0} is a member of the following Groups (IDs)", retrievedUser.DisplayName);
+                //foreach (String memberGroup in memberGroups)
+                //{
+                //    Console.WriteLine("Member of Group ID: " + memberGroup);
+                //}
 
                 #endregion
 
@@ -337,25 +354,33 @@ namespace GraphConsoleAppV3
                 //*********************************************************************
                 Console.WriteLine("\n {0} is a member of the following Group and Roles (IDs)", retrievedUser.DisplayName);
                 IUserFetcher retrievedUserFetcher = retrievedUser;
-                IPagedCollection<IDirectoryObject> pagedCollection = retrievedUserFetcher.MemberOf.ExecuteAsync().Result;
-                do
+                try
                 {
-                    List<IDirectoryObject> directoryObjects = pagedCollection.CurrentPage.ToList();
-                    foreach (IDirectoryObject directoryObject in directoryObjects)
+                    IPagedCollection<IDirectoryObject> pagedCollection = retrievedUserFetcher.MemberOf.ExecuteAsync().Result;
+                    do
                     {
-                        if (directoryObject is Group)
+                        List<IDirectoryObject> directoryObjects = pagedCollection.CurrentPage.ToList();
+                        foreach (IDirectoryObject directoryObject in directoryObjects)
                         {
-                            Group group = directoryObject as Group;
-                            Console.WriteLine(" Group: {0}  Description: {1}", group.DisplayName, group.Description);
+                            if (directoryObject is Group)
+                            {
+                                Group group = directoryObject as Group;
+                                Console.WriteLine(" Group: {0}  Description: {1}", group.DisplayName, group.Description);
+                            }
+                            if (directoryObject is DirectoryRole)
+                            {
+                                DirectoryRole role = directoryObject as DirectoryRole;
+                                Console.WriteLine(" Role: {0}  Description: {1}", role.DisplayName, role.Description);
+                            }
                         }
-                        if (directoryObject is DirectoryRole)
-                        {
-                            DirectoryRole role = directoryObject as DirectoryRole;
-                            Console.WriteLine(" Role: {0}  Description: {1}", role.DisplayName, role.Description);
-                        }
-                    }
-                    pagedCollection = pagedCollection.GetNextPageAsync().Result;
-                } while (pagedCollection != null && pagedCollection.MorePagesAvailable);
+                        pagedCollection = pagedCollection.GetNextPageAsync().Result;
+                    } while (pagedCollection != null && pagedCollection.MorePagesAvailable);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\nError getting user's groups and roles memberships. {0} {1}", e.Message,
+                        e.InnerException != null ? e.InnerException.Message : "");
+                }
 
                 #endregion
             }
@@ -443,8 +468,17 @@ namespace GraphConsoleAppV3
 
             if (retrievedGroup.ObjectId != null)
             {
-                activeDirectoryClient.Context.AddLink(retrievedGroup, "members", newUser);
-                activeDirectoryClient.Context.SaveChanges();
+                try
+                {
+                    activeDirectoryClient.Context.AddLink(retrievedGroup, "members", newUser);
+                    activeDirectoryClient.Context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\nError assigning member to group. {0} {1}",
+                        e.Message, e.InnerException != null ? e.InnerException.Message : "");
+                }
+                
             }
 
             #endregion
@@ -456,37 +490,45 @@ namespace GraphConsoleAppV3
                 Console.WriteLine("\n Found Group: " + retrievedGroup.DisplayName + "  " + retrievedGroup.Description);
 
                 //*********************************************************************
-                // get the groups' membership using GetAllDirectLinks - 
+                // get the groups' membership - 
                 // Note this method retrieves ALL links in one request - please use this method with care - this
                 // may return a very large number of objects
                 //*********************************************************************
                 IGroupFetcher retrievedGroupFetcher = retrievedGroup;
-                IPagedCollection<IDirectoryObject> members = retrievedGroupFetcher.Members.ExecuteAsync().Result;
-                Console.WriteLine(" Members:");
-                do
+                try
                 {
-                    List<IDirectoryObject> directoryObjects = members.CurrentPage.ToList();
-                    foreach (IDirectoryObject member in directoryObjects)
+                    IPagedCollection<IDirectoryObject> members = retrievedGroupFetcher.Members.ExecuteAsync().Result;
+                    Console.WriteLine(" Members:");
+                    do
                     {
-                        if (member is User)
+                        List<IDirectoryObject> directoryObjects = members.CurrentPage.ToList();
+                        foreach (IDirectoryObject member in directoryObjects)
                         {
-                            User user = member as User;
-                            Console.WriteLine("User DisplayName: {0}  UPN: {1}",
-                                user.DisplayName,
-                                user.UserPrincipalName);
+                            if (member is User)
+                            {
+                                User user = member as User;
+                                Console.WriteLine("User DisplayName: {0}  UPN: {1}",
+                                    user.DisplayName,
+                                    user.UserPrincipalName);
+                            }
+                            if (member is Group)
+                            {
+                                Group group = member as Group;
+                                Console.WriteLine("Group DisplayName: {0}", group.DisplayName);
+                            }
+                            if (member is Contact)
+                            {
+                                Contact contact = member as Contact;
+                                Console.WriteLine("Contact DisplayName: {0}", contact.DisplayName);
+                            }
                         }
-                        if (member is Group)
-                        {
-                            Group group = member as Group;
-                            Console.WriteLine("Group DisplayName: {0}", group.DisplayName);
-                        }
-                        if (member is Contact)
-                        {
-                            Contact contact = member as Contact;
-                            Console.WriteLine("Contact DisplayName: {0}", contact.DisplayName);
-                        }
-                    }
-                } while (members != null && members.MorePagesAvailable);
+                    } while (members != null && members.MorePagesAvailable);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\nError getting groups' membership. {0} {1}",
+                        e.Message, e.InnerException != null ? e.InnerException.Message : "");
+                }
             }
 
             #endregion
@@ -595,36 +637,32 @@ namespace GraphConsoleAppV3
 
             #region Get All Roles
 
-            //// This doesn't work right now. The issue is being tracked by the development team.
-            ////*********************************************************************
-            //// Get All Roles
-            ////*********************************************************************
-            //List<IDirectoryRole> foundRoles = null;
-            //try
-            //{
-            //    foundRoles = activeDirectoryClient.Roles.ExecuteAsync().Result.CurrentPage.ToList();
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("\nError getting Roles {0} {1}", e.Message,
-            //        e.InnerException != null ? e.InnerException.Message : "");
-            //}
+            //*********************************************************************
+            // Get All Roles
+            //*********************************************************************
+            List<IDirectoryRole> foundRoles = null;
+            try
+            {
+                foundRoles = activeDirectoryClient.DirectoryRoles.ExecuteAsync().Result.CurrentPage.ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nError getting Roles {0} {1}", e.Message,
+                    e.InnerException != null ? e.InnerException.Message : "");
+            }
 
-            //if (foundRoles != null && foundRoles.Count > 0)
-            //{
-            //    foreach (IDirectoryRole role in foundRoles)
-            //    {
-            //        if (role.DisplayName == searchString.Trim())
-            //        {
-            //            Console.WriteLine("\n Found Role: {0} {1} {2} ",
-            //                role.DisplayName, role.Description, role.ObjectId);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Role Not Found {0}", searchString);
-            //}
+            if (foundRoles != null && foundRoles.Count > 0)
+            {
+                foreach (IDirectoryRole role in foundRoles)
+                {
+                    Console.WriteLine("\n Found Role: {0} {1} {2} ",
+                        role.DisplayName, role.Description, role.ObjectId);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Role Not Found {0}", searchString);
+            }
 
             #endregion
 
@@ -834,19 +872,19 @@ namespace GraphConsoleAppV3
             #endregion
 
             #region Assign Direct Permission
-
             try
             {
-                if (appObject.ObjectId != null && retrievedUser.ObjectId != null && newServicePrincpal.ObjectId != null)
+                User user =
+                        (User)activeDirectoryClient.Users.ExecuteAsync().Result.CurrentPage.ToList().FirstOrDefault();
+                if (appObject.ObjectId != null && user!= null && newServicePrincpal.ObjectId != null)
                 {
                     AppRoleAssignment appRoleAssignment = new AppRoleAssignment();
                     appRoleAssignment.Id = appRole.Id;
                     appRoleAssignment.ResourceId = Guid.Parse(newServicePrincpal.ObjectId);
                     appRoleAssignment.PrincipalType = "User";
-                    appRoleAssignment.PrincipalId = Guid.Parse(retrievedUser.ObjectId);
-                    retrievedUser.AppRoleAssignments.Add(appRoleAssignment);
-
-                    retrievedUser.UpdateAsync().Wait();
+                    appRoleAssignment.PrincipalId = Guid.Parse(user.ObjectId);
+                    user.AppRoleAssignments.Add(appRoleAssignment);
+                    user.UpdateAsync().Wait();
                     Console.WriteLine("User {0} is successfully assigned direct permission.", retrievedUser.DisplayName);
                 }
             }
@@ -908,30 +946,29 @@ namespace GraphConsoleAppV3
 
             #region Create New Permission
 
-            // This doesn't work right now. The issue is being tracked by the development team.
-            ////*********************************************************************************************
-            //// Create new permission object
-            ////*********************************************************************************************
-            //OAuth2PermissionGrant permissionObject = new OAuth2PermissionGrant();
-            //permissionObject.ConsentType = "AllPrincipals";
-            //permissionObject.Scope = "user_impersonation";
-            //permissionObject.StartTime = DateTime.Now;
-            //permissionObject.ExpiryTime = (DateTime.Now).AddMonths(12);
+            //*********************************************************************************************
+            // Create new permission object
+            //*********************************************************************************************
+            OAuth2PermissionGrant permissionObject = new OAuth2PermissionGrant();
+            permissionObject.ConsentType = "AllPrincipals";
+            permissionObject.Scope = "user_impersonation";
+            permissionObject.StartTime = DateTime.Now;
+            permissionObject.ExpiryTime = (DateTime.Now).AddMonths(12);
 
-            //// resourceId is objectId of the resource, in this case objectId of AzureAd (Graph API)
-            //permissionObject.ResourceId = "52620afb-80de-4096-a826-95f4ad481686";
+            // resourceId is objectId of the resource, in this case objectId of AzureAd (Graph API)
+            permissionObject.ResourceId = "52620afb-80de-4096-a826-95f4ad481686";
 
-            ////ClientId = objectId of servicePrincipal
-            //permissionObject.ClientId = newServicePrincpal.ObjectId;
-            //try
-            //{
-            //    activeDirectoryClient.Oauth2PermissionGrants.AddOAuth2PermissionGrantAsync(permissionObject).Wait();
-            //    Console.WriteLine("New Permission object created: " + permissionObject.ObjectId);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("Permission Creation exception: {0} {1}", e.Message, e.InnerException != null ? e.InnerException.Message : "");
-            //}
+            //ClientId = objectId of servicePrincipal
+            permissionObject.ClientId = newServicePrincpal.ObjectId;
+            try
+            {
+                activeDirectoryClient.Oauth2PermissionGrants.AddOAuth2PermissionGrantAsync(permissionObject).Wait();
+                Console.WriteLine("New Permission object created: " + permissionObject.ObjectId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Permission Creation exception: {0} {1}", e.Message, e.InnerException != null ? e.InnerException.Message : "");
+            }
 
             #endregion
 
