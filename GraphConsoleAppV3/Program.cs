@@ -470,8 +470,8 @@ namespace GraphConsoleAppV3
             {
                 try
                 {
-                    activeDirectoryClient.Context.AddLink(retrievedGroup, "members", newUser);
-                    activeDirectoryClient.Context.SaveChanges();
+                    retrievedGroup.Members.Add(newUser as DirectoryObject);
+                    retrievedGroup.UpdateAsync().Wait();
                 }
                 catch (Exception e)
                 {
@@ -542,8 +542,8 @@ namespace GraphConsoleAppV3
             {
                 try
                 {
-                    activeDirectoryClient.Context.AddLink(retrievedGroup, "members", userToBeAdded);
-                    activeDirectoryClient.Context.SaveChangesAsync().Wait();
+                    retrievedGroup.Members.Add(userToBeAdded as DirectoryObject);
+                    retrievedGroup.UpdateAsync().Wait();
                 }
                 catch (Exception e)
                 {
@@ -867,6 +867,67 @@ namespace GraphConsoleAppV3
                     Console.WriteLine("Service Principal Creation execption: {0} {1}", e.Message,
                         e.InnerException != null ? e.InnerException.Message : "");
                 }
+            }
+
+            #endregion
+
+            #region Create an Extension Property
+
+            ExtensionProperty linkedInUserId = new ExtensionProperty
+            {
+                Name = "linkedInUserId",
+                DataType = "String",
+                TargetObjects = { "User" }
+            };
+            try
+            {
+                appObject.ExtensionProperties.Add(linkedInUserId);
+                appObject.UpdateAsync().Wait();
+                Console.WriteLine("\nUser object extended successfully.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nError extending the user object {0} {1}", e.Message,
+                    e.InnerException != null ? e.InnerException.Message : "");
+            }
+
+            #endregion
+
+            #region Manipulate an Extension Property
+
+            try
+            {
+                if (retrievedUser != null && retrievedUser.ObjectId != null)
+                {
+                    retrievedUser.SetExtendedProperty(linkedInUserId.Name, "ExtensionPropertyValue");
+                    retrievedUser.UpdateAsync().Wait();
+                    Console.WriteLine("\nUser {0}'s extended property set successully.", retrievedUser.DisplayName);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nError Updating the user object {0} {1}", e.Message,
+                    e.InnerException != null ? e.InnerException.Message : "");
+            }
+
+            #endregion
+
+            #region Get an Extension Property
+
+            try
+            {
+                if (retrievedUser != null && retrievedUser.ObjectId != null)
+                {
+                    IReadOnlyDictionary<string, object> extendedProperties = retrievedUser.GetExtendedProperties();
+                    object extendedProperty = extendedProperties[linkedInUserId.Name];
+                    Console.WriteLine("\n Retrieved User {0}'s extended property value is: {1}.", retrievedUser.DisplayName,
+                        extendedProperty);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nError Updating the user object {0} {1}", e.Message,
+                    e.InnerException != null ? e.InnerException.Message : "");
             }
 
             #endregion
