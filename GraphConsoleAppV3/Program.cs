@@ -83,7 +83,7 @@ namespace GraphConsoleAppV3
             }
             else
             {
-                TenantDetail tenantDetail = (TenantDetail) tenant;
+                TenantDetail tenantDetail = (TenantDetail)tenant;
                 Console.WriteLine("Tenant Display Name: " + tenantDetail.DisplayName);
 
                 // Get the Tenant's Verified Domains 
@@ -235,7 +235,7 @@ namespace GraphConsoleAppV3
             // should only find one user with the specified UPN
             if (retrievedUsers != null && retrievedUsers.Count == 1)
             {
-                retrievedUser = (User) retrievedUsers.First();
+                retrievedUser = (User)retrievedUsers.First();
             }
             else
             {
@@ -303,7 +303,7 @@ namespace GraphConsoleAppV3
                 if (newUser.ObjectId != null)
                 {
                     Console.WriteLine("\n Getting User{0}'s Direct Reports.", newUser.DisplayName);
-                    IUserFetcher newUserFetcher = (IUserFetcher) newUser;
+                    IUserFetcher newUserFetcher = (IUserFetcher)newUser;
                     try
                     {
                         IPagedCollection<IDirectoryObject> directReports =
@@ -440,7 +440,7 @@ namespace GraphConsoleAppV3
             // Search for a group using a startsWith filter (displayName property)
             //*********************************************************************
             Group retrievedGroup = new Group();
-            searchString = "US";
+            searchString = "My";
             List<IGroup> foundGroups = null;
             try
             {
@@ -478,7 +478,7 @@ namespace GraphConsoleAppV3
                     Console.WriteLine("\nError assigning member to group. {0} {1}",
                         e.Message, e.InnerException != null ? e.InnerException.Message : "");
                 }
-                
+
             }
 
             #endregion
@@ -759,7 +759,7 @@ namespace GraphConsoleAppV3
                             {
                                 // create addLicense object and assign the Enterprise Sku GUID to the skuId
                                 // 
-                                AssignedLicense addLicense = new AssignedLicense {SkuId = sku.SkuId.Value};
+                                AssignedLicense addLicense = new AssignedLicense { SkuId = sku.SkuId.Value };
 
                                 // find plan id of SharePoint Service Plan
                                 foreach (ServicePlanInfo servicePlan in sku.ServicePlans)
@@ -771,8 +771,8 @@ namespace GraphConsoleAppV3
                                     }
                                 }
 
-                                IList<AssignedLicense> licensesToAdd = new[] {addLicense};
-                                IList<Guid> licensesToRemove = new Guid[] {};
+                                IList<AssignedLicense> licensesToAdd = new[] { addLicense };
+                                IList<Guid> licensesToRemove = new Guid[] { };
 
                                 // attempt to assign the license object to the new user 
                                 try
@@ -799,7 +799,7 @@ namespace GraphConsoleAppV3
 
             #endregion
 
-            #region Switch to OAuth Authorization Code Grant (Acting as a user) 
+            #region Switch to OAuth Authorization Code Grant (Acting as a user)
 
             activeDirectoryClient = AuthenticationHelper.GetActiveDirectoryClientAsUser();
 
@@ -810,7 +810,7 @@ namespace GraphConsoleAppV3
             //*********************************************************************************************
             // Create a new Application object with App Role Assignment (Direct permission)
             //*********************************************************************************************
-            Application appObject = new Application {DisplayName = "Test-Demo App" + Helper.GetRandomString(8)};
+            Application appObject = new Application { DisplayName = "Test-Demo App" + Helper.GetRandomString(8) };
             appObject.IdentifierUris.Add("https://localhost/demo/" + Guid.NewGuid());
             appObject.ReplyUrls.Add("https://localhost/demo");
             AppRole appRole = new AppRole();
@@ -937,7 +937,7 @@ namespace GraphConsoleAppV3
             {
                 User user =
                         (User)activeDirectoryClient.Users.ExecuteAsync().Result.CurrentPage.ToList().FirstOrDefault();
-                if (appObject.ObjectId != null && user!= null && newServicePrincpal.ObjectId != null)
+                if (appObject.ObjectId != null && user != null && newServicePrincpal.ObjectId != null)
                 {
                     AppRoleAssignment appRoleAssignment = new AppRoleAssignment();
                     appRoleAssignment.Id = appRole.Id;
