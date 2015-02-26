@@ -77,6 +77,7 @@ namespace GraphConsoleAppV3
                 Console.WriteLine("\nError getting TenantDetails {0} {1}", e.Message,
                     e.InnerException != null ? e.InnerException.Message : "");
             }
+
             if (tenant == null)
             {
                 Console.WriteLine("Tenant not found");
@@ -321,7 +322,7 @@ namespace GraphConsoleAppV3
                                 }
                             }
                             directReports = directReports.GetNextPageAsync().Result;
-                        } while (directReports != null && directReports.MorePagesAvailable);
+                        } while (directReports != null);
                     }
                     catch (Exception e)
                     {
@@ -374,7 +375,7 @@ namespace GraphConsoleAppV3
                             }
                         }
                         pagedCollection = pagedCollection.GetNextPageAsync().Result;
-                    } while (pagedCollection != null && pagedCollection.MorePagesAvailable);
+                    } while (pagedCollection != null);
                 }
                 catch (Exception e)
                 {
@@ -425,7 +426,7 @@ namespace GraphConsoleAppV3
                             user.DisplayName, user.UserPrincipalName);
                     }
                     searchResults = searchResults.GetNextPageAsync().Result;
-                } while (searchResults != null && searchResults.MorePagesAvailable);
+                } while (searchResults != null);
             }
             else
             {
@@ -522,7 +523,8 @@ namespace GraphConsoleAppV3
                                 Console.WriteLine("Contact DisplayName: {0}", contact.DisplayName);
                             }
                         }
-                    } while (members != null && members.MorePagesAvailable);
+                        members = members.GetNextPageAsync().Result;
+                    } while (members != null);
                 }
                 catch (Exception e)
                 {
@@ -692,7 +694,7 @@ namespace GraphConsoleAppV3
                             servicePrincipal.DisplayName);
                     }
                     servicePrincipals = servicePrincipals.GetNextPageAsync().Result;
-                } while (servicePrincipals != null && servicePrincipals.MorePagesAvailable);
+                } while (servicePrincipals != null);
             }
 
             #endregion
@@ -722,7 +724,7 @@ namespace GraphConsoleAppV3
                         Console.WriteLine("Application AppId: {0}  Name: {1}", app.AppId, app.DisplayName);
                     }
                     applications = applications.GetNextPageAsync().Result;
-                } while (applications != null && applications.MorePagesAvailable);
+                } while (applications != null);
             }
 
             #endregion
@@ -794,7 +796,7 @@ namespace GraphConsoleAppV3
                         }
                     }
                     skus = skus.GetNextPageAsync().Result;
-                } while (skus != null && skus.MorePagesAvailable);
+                } while (skus != null);
             }
 
             #endregion
@@ -995,12 +997,12 @@ namespace GraphConsoleAppV3
                                         Console.WriteLine("Device Owner ID: " + owner.ObjectId);
                                     }
                                     registeredOwners = registeredOwners.GetNextPageAsync().Result;
-                                } while (registeredOwners != null && registeredOwners.MorePagesAvailable);
+                                } while (registeredOwners != null);
                             }
                         }
                     }
                     devices = devices.GetNextPageAsync().Result;
-                } while (devices != null && devices.MorePagesAvailable);
+                } while (devices != null);
             }
 
             #endregion
@@ -1057,7 +1059,8 @@ namespace GraphConsoleAppV3
                     {
                         Console.WriteLine("Permission: {0}  Name: {1}", perm.ClientId, perm.Scope);
                     }
-                } while (permissions != null && permissions.MorePagesAvailable);
+                    permissions = permissions.GetNextPageAsync().Result;
+                } while (permissions != null);
             }
 
             #endregion
