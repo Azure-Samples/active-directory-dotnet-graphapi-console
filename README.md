@@ -4,7 +4,7 @@ platforms:
 author: azure
 ---
 
-ConsoleApp-GraphAPI-DotNet
+Call the Azure AD Graph API from a native client
 ==========================
 
 Console App using Graph Client Library Version 2.0
