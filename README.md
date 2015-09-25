@@ -1,11 +1,10 @@
 ---
-services:
-platforms:
-author: azure
+services: active-directory
+platforms: dotnet
+author: dstrockis
 ---
 
 Call the Azure AD Graph API from a native client
-==========================
 
 Console App using Graph Client Library Version 2.0
 
@@ -17,7 +16,7 @@ The sample incorporates using the Active Directory Authentication Library (ADAL)
 Step 1: Clone or download this repository
 From your shell or command line:
 
-`git clone https://github.com/AzureADSamples/ConsoleApp-GraphAPI-DotNet.git`
+`git clone https://github.com/Azure-Samples/active-directory-dotnet-graphapi-console.git`
 
 
 Step 2: Run the sample in Visual Studio 2013
