@@ -35,7 +35,7 @@ Register the Sample app for your own tenant
 
 1. Sign in to the [Azure Portal](https://portal.azure.com) using an account from your own Azure Active Directory tenant.
 
-2. Type in **App registrations** in the search bar.  You'll now register 2 applications for this sample.
+2. Type in **App registrations** in the search bar, or click "More Services" -> "Azure Active Directory" -> "App Registrations" from the left sidebar.  You'll now register **2 applications** for this sample.
 
 3. In the **App registrations blade**, click **Add**, and enter a friendly name for the application, for example **"Console App for Azure AD"**, select **Native**, add use **https://localhost/** as the Redirect URI. Click **Create**.
 
@@ -51,7 +51,7 @@ Register the Sample app for your own tenant
 
 9. You should now see your newly created app in the app list.  Click on the app to see further settings.
 
-10. Click **Keys** (in the **Settings** blade), and enter a key description and select a key duration from one of the 3 options.  The **key value** will be displayed after you click **Save**. Save this to a secure location - you'll need it later for the sample app code. NOTE: The key value is only displayed once, and you will not be able to retrieve it later.
+10. Click **Keys** (in the **Settings** blade), and enter a key description and select a key duration from one of the 3 options.  The **key value** will be displayed after you click **Save**. Save this to a secure location - you'll need it later for the sample app code. *NOTE:* The key value is only displayed once, and you will not be able to retrieve it later.
 
 11. Click **Required permissions** (in the **Settings** blade).  You'll now see *Windows Azure Active Directory* listed. Select this to configure additional permissions. Under **Enable permissions**, select *Read Directory Data* from the list of **Application permissions**.  Selecting an application permission will mean that your application can use the OAuth client credential flow to call the Graph API (without requiring a user). Click **Save**.
 
