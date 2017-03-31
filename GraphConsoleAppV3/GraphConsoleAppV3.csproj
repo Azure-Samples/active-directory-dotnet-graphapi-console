@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Azure.ActiveDirectory.GraphClient">
-	  <HintPath Condition="Exists('$(RootDir)\CxCache')">$(RootDir)\CxCache\Microsoft.Azure.ActiveDirectory.GraphClient.2.1.1\lib\portable-net4+sl5+win+wpa+wp8\Microsoft.Azure.ActiveDirectory.GraphClient.dll</HintPath>
+      <HintPath Condition="Exists('$(RootDir)\CxCache')">$(RootDir)\CxCache\Microsoft.Azure.ActiveDirectory.GraphClient.2.1.1\lib\portable-net4+sl5+win+wpa+wp8\Microsoft.Azure.ActiveDirectory.GraphClient.dll</HintPath>
       <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\Microsoft.Azure.ActiveDirectory.GraphClient.2.1.1\lib\portable-net4+sl5+win+wpa+wp8\Microsoft.Azure.ActiveDirectory.GraphClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -70,6 +70,7 @@
       <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
