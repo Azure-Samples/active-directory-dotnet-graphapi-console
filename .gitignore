@@ -7,3 +7,4 @@ GraphConsoleAppV3/obj/*
 *.DotSettings*
 GraphConsoleAppV3/Program-old.cs
 packages/*
+/.vs/GraphConsoleAppV3/v15/sqlite3
