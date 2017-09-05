@@ -17,7 +17,7 @@ namespace GraphConsoleAppV3
         public static ActiveDirectoryClient GetActiveDirectoryClientAsApplication()
         {
             Uri servicePointUri = new Uri(GlobalConstants.ResourceUrl);
-            Uri serviceRoot = new Uri(servicePointUri, AppModeConstants.TenantId);
+            Uri serviceRoot = new Uri(servicePointUri, GlobalConstants.TenantId);
             ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
                 async () => await AcquireTokenAsyncForApplication());
             return activeDirectoryClient;
@@ -42,7 +42,7 @@ namespace GraphConsoleAppV3
             {
                 AuthenticationContext authenticationContext = new AuthenticationContext(AppModeConstants.AuthString, false);
                 // Config for OAuth client credentials 
-                ClientCredential clientCred = new ClientCredential(AppModeConstants.ClientId,
+                ClientCredential clientCred = new ClientCredential(GlobalConstants.ClientId,
                     AppModeConstants.ClientSecret);
                 AuthenticationResult authenticationResult =
                     await authenticationContext.AcquireTokenAsync(GlobalConstants.ResourceUrl,
@@ -59,7 +59,7 @@ namespace GraphConsoleAppV3
         public static ActiveDirectoryClient GetActiveDirectoryClientAsUser()
         {
             Uri servicePointUri = new Uri(GlobalConstants.ResourceUrl);
-            Uri serviceRoot = new Uri(servicePointUri, UserModeConstants.TenantId);
+            Uri serviceRoot = new Uri(servicePointUri, GlobalConstants.TenantId);
             ActiveDirectoryClient activeDirectoryClient = new ActiveDirectoryClient(serviceRoot,
                 async () => await AcquireTokenAsyncForUser());
             return activeDirectoryClient;
@@ -85,7 +85,7 @@ namespace GraphConsoleAppV3
                 var redirectUri = new Uri("https://localhost");
                 AuthenticationContext authenticationContext = new AuthenticationContext(UserModeConstants.AuthString, false);
                 AuthenticationResult userAuthnResult = await authenticationContext.AcquireTokenAsync(GlobalConstants.ResourceUrl,
-                    UserModeConstants.ClientId, redirectUri, new PlatformParameters(PromptBehavior.RefreshSession));
+                    GlobalConstants.ClientId, redirectUri, new PlatformParameters(PromptBehavior.RefreshSession));
                 TokenForUser = userAuthnResult.AccessToken;
                 Console.WriteLine("\n Welcome " + userAuthnResult.UserInfo.GivenName + " " +
                                   userAuthnResult.UserInfo.FamilyName);
