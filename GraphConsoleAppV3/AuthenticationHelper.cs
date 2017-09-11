@@ -40,14 +40,25 @@ namespace GraphConsoleAppV3
         {
             if (TokenForApplication == null)
             {
-                AuthenticationContext authenticationContext = new AuthenticationContext(AppModeConstants.AuthString, false);
-                // Config for OAuth client credentials 
-                ClientCredential clientCred = new ClientCredential(GlobalConstants.ClientId,
-                    AppModeConstants.ClientSecret);
-                AuthenticationResult authenticationResult =
-                    await authenticationContext.AcquireTokenAsync(GlobalConstants.ResourceUrl,
-                        clientCred);
-                TokenForApplication = authenticationResult.AccessToken;
+                AuthenticationContext authenticationContext = new AuthenticationContext(
+                    AppModeConstants.AuthString,
+                    false);
+
+                // Configuration for OAuth client credentials 
+                if (string.IsNullOrEmpty(AppModeConstants.ClientSecret))
+                {
+                    Program.WriteError(
+                        "Client secret not set. Please follow the steps in the README to generate a client secret.");
+                }
+                else
+                {
+                    ClientCredential clientCred = new ClientCredential(
+                        GlobalConstants.ClientId,
+                        AppModeConstants.ClientSecret);
+                    AuthenticationResult authenticationResult =
+                        await authenticationContext.AcquireTokenAsync(GlobalConstants.ResourceUrl, clientCred);
+                    TokenForApplication = authenticationResult.AccessToken;
+                }
             }
             return TokenForApplication;
         }
