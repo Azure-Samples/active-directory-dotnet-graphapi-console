@@ -54,7 +54,7 @@ namespace GraphConsoleAppV3
                 Console.WriteLine("\n=============================\n\n");
 
 
-                ITenantDetail tenantDetail = await GetTenantDetails(client, UserModeConstants.TenantId);
+                ITenantDetail tenantDetail = await GetTenantDetails(client, GlobalConstants.TenantId);
                 User signedInUser = await GetSignedInUser(client);
                 await UpdateUsersPhoto(signedInUser);
                 await PrintUsersGroupsAndRoles(signedInUser);
